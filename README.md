@@ -8,6 +8,7 @@ This task is completed using TypeScript.
 
 ### Project dependencies
 [MongoDB](https://www.mongodb.com/download-center)
+
 [Node.JS (personally used v14)](https://nodejs.org/en/)
 
 ### Install project dependencies
