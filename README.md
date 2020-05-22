@@ -37,8 +37,15 @@ Code is divided into some segments, to deliver separation of concerns and enforc
 - Routes - these contains API routes for specific functionality (only couriers in this instance)
 - Services - these contains database logic and some validation of logic flow.
 
+## Why this structure?
+While I think this structure (or any structure out there for that matter) is perfectly future proof, I believe it's easily maintainable and it's very easy to just write code and separate logic on demand when necessary. Every single folder has concerns that only they do.
+
 ## Testing
 Helpers and Services are covered with some simple unit tests, to ensure that certain methods are called under some specific conditions. Jest was used to create those tests. Test folders are found next to the files that are being tested.
+
+## Why Mongo?
+Mongo is extremely performant and is a perfect option for data structures who are pretty small and/or we don't care about reading speeds all that much, since writing is extremely fast. Even though there can be problematic data multiplications for more complex data structures, we are completely avoiding this here, hence I believe it was a better option.
+Also, I believe that accessing courier data sometimes is crucial, maybe even to the point where data duplication doesn't even matter and we would rather take data as fast as possible. That's why NoSQL databases are so great for this.
 
 ## Courier model
 Courier is comprised of three different fields, which are stored in MongoDB
@@ -73,3 +80,14 @@ curl --header "Content-Type: application/json"   --request DELETE   http://local
 ```
 
 This endpoint is for deleting the courier. The id of the courier has to be passed for this operation.
+
+## Room for improvement
+This task is far from finished or perfect under the certain timebox, here are the changes I would work on further:
+- Better code splitting. Although I believe it's currently not the worst design pattern right now as it separates most of the concerns, it's still pretty prone to become messy when code updates needs to be done.
+- More testing. With current unit tests, only few specific cases are covered, which is far from enough for fully complete API.
+- Integration testing. Specifically testing data inserts into DB, testing if data is fetched correctly from there under given rules.
+- Race condition. This could be solved by using locks, for instance. If we would lock some specific part of data as it is being updated, we could make sure that it's not confusing users who are trying to read it. Good example for that would be [Async-lock](https://www.npmjs.com/package/async-lock)
+- Better naming on some functions.
+
+## Author
+Justinas Masiulis, masiulisjustinas@gmail.com
