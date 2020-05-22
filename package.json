@@ -1,10 +1,11 @@
 {
-  "name": "node-typescript-boilerplate",
-  "version": "0.0.0",
-  "description": "Minimalistic boilerplate to quick-start Node.js development in TypeScript.",
+  "name": "stuart-tech-test",
+  "version": "1.0.0",
+  "description": "Tech test, completed for senior solutions engineer position.",
   "engines": {
     "node": ">= 12.13 <13"
   },
+  "type": "module",
   "devDependencies": {
     "@types/jest": "~25.2.1",
     "@types/node": "~12.12.38",
@@ -17,6 +18,7 @@
     "prettier": "~2.0.5",
     "rimraf": "~3.0.2",
     "ts-jest": "~25.5.1",
+    "ts-node": "^8.10.1",
     "tsutils": "~3.17.0",
     "typescript": "~3.8.3"
   },
@@ -26,11 +28,15 @@
     "build:watch": "tsc -w -p tsconfig.release.json",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "dev": "npx ts-node src/main.js"
   },
-  "author": "Jakub Synowiec <github@jakubsynowiec.info>",
-  "license": "Apache-2.0",
+  "author": "Justinas Masiulis <masiulisjustinas@gmail.com>",
   "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.5.0",
+    "mongoose": "^5.9.15",
     "tslib": "~1.11.2"
   }
 }

@@ -1,32 +1,40 @@
-/**
- * Some predefined delays (in milliseconds).
- */
-export enum Delays {
-  Short = 500,
-  Medium = 2000,
-  Long = 5000,
-}
+import express from 'express';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import apiRouter from './routes/api';
+import * as apiResponse from './helpers/apiResponse';
 
-/**
- * Returns a Promise<string> that resolves after given time.
- *
- * @param {string} name - A name.
- * @param {number=} [delay=Delays.Medium] - Number of milliseconds to delay resolution of the Promise.
- * @returns {Promise<string>}
- */
-function delayedHello(
-  name: string,
-  delay: number = Delays.Medium,
-): Promise<string> {
-  return new Promise((resolve: (value?: string) => void) =>
-    setTimeout(() => resolve(`Hello, ${name}`), delay),
-  );
-}
+dotenv.config();
 
-// Below are examples of using ESLint errors suppression
-// Here it is suppressing missing return type definitions for greeter function
+// DB connection
+const MONGODB_URL = process.env.MONGODB_URL;
+mongoose.connect(MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
+	//don't show the log when it is test
+	if (process.env.NODE_ENV !== "test") {
+		console.log("Connected to %s", MONGODB_URL);
+		console.log("App is running ... \n");
+		console.log("Press CTRL + C to stop the process. \n");
+	}
+}).catch(err => {
+		console.error("App starting error:", err.message);
+		process.exit(1);
+	});
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-export async function greeter(name: string) {
-  return await delayedHello(name, Delays.Long);
-}
+const app = express();
+
+app.listen(3000, function(){
+	console.log('Listening...'); //Listening on port 3000
+});
+
+console.log(app)
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+app.use("/api/", apiRouter);
+
+// throw 404 if URL not found
+app.all("*", function(_req, res) {
+	return apiResponse.notFoundResponse(res, "Page not found");
+});
+
+export default app;
