@@ -5,7 +5,6 @@
   "engines": {
     "node": ">= 12.13 <13"
   },
-  "type": "module",
   "devDependencies": {
     "@types/jest": "~25.2.1",
     "@types/node": "~12.12.38",
@@ -29,7 +28,7 @@
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
-    "dev": "npx ts-node src/main.js"
+    "dev": "npx ts-node src/main.ts"
   },
   "author": "Justinas Masiulis <masiulisjustinas@gmail.com>",
   "dependencies": {
