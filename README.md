@@ -1,53 +1,21 @@
-[![TypeScript version][ts-badge]][typescript-38]
-[![Node.js version][nodejs-badge]][nodejs]
-[![APLv2][license-badge]][LICENSE]
-[![Build Status - Travis][travis-badge]][travis-ci]
-[![Build Status - GitHub Actions][gha-badge]][gha-ci]
-[![Sponsor][sponsor-badge]][sponsor]
 
-# node-typescript-boilerplate
+## Tech task introduction
 
-👩🏻‍💻 Developer Ready: A comprehensive template. Works out of the box for most [Node.js][nodejs] projects.
+This is the tech task done for Stuart interview process.
+This task was done in under 4 hours, to deliver results in the asked time box.
+This task includes the courier API, where you can access insert, delete, update methods, as well as inspect courier data and find needed couriers with some capacity.
+This task is completed using TypeScript.
 
-🏃🏽 Instant Value: All basic tools included and configured:
+### Project dependencies
+[MongoDB](https://www.mongodb.com/download-center)
+[Node.JS (personally used v14)](https://nodejs.org/en/)
 
-+ [TypeScript][typescript] [3.8][typescript-38]
-+ [ESLint][eslint] with some initial rules recommendation
-+ [Jest][jest] for fast unit testing and code coverage
-+ Type definitions for Node.js and Jest
-+ [Prettier][prettier] to enforce consistent code style
-+ NPM [scripts](#available-scripts) for common operations
-+ simple example of TypeScript code and unit test
-+ .editorconfig for consistent file format
-+ example configuration for [GitHub Actions][gh-actions] and [Travis CI][travis]
+### Install project dependencies
 
-🤲 Free as in speech: available under the APLv2 license.
-
-## Getting Started
-
-This project is intended to be used with the latest Active LTS release of [Node.js][nodejs].
-
-### Use as a repository template
-
-To start, just click the **[Use template][repo-template-action]** link (or the green button). Now start adding your code in the `src` and unit tests in the `__tests__` directories.
-
-### Clone repository
-
-To clone the repository use the following commands:
+To install the dependencies, write the command
 
 ```sh
-git clone https://github.com/jsynowiec/node-typescript-boilerplate
-cd node-typescript-boilerplate
 npm install
-```
-
-### Download latest release
-
-Download and unzip current `master` branch or one of tags:
-
-```sh
-wget https://github.com/jsynowiec/node-typescript-boilerplate/archive/master.zip -O node-typescript-boilerplate.zip
-unzip node-typescript-boilerplate.zip && rm node-typescript-boilerplate.zip
 ```
 
 ## Available Scripts
@@ -58,42 +26,49 @@ unzip node-typescript-boilerplate.zip && rm node-typescript-boilerplate.zip
 + `lint` - lint source files and tests,
 + `test` - run tests,
 + `test:watch` - interactive watch mode to automatically re-run tests
++ `dev` - to start the API
 
-## Additional Informations
+## Code structure
+Code is divided into some segments, to deliver separation of concerns and enforce good coding practices.
+- Controllers - these only contains parameter validation and calls to services.
+- Helpers - these contains helper functions, which are reusable and otherwise not fit to be in services.
+- Models - these contains collection models and how data is stored in the database.
+- Routes - these contains API routes for specific functionality (only couriers in this instance)
+- Services - these contains database logic and some validation of logic flow.
 
-### Writing tests in JavaScript
+## Testing
+Helpers and Services are covered with some simple unit tests, to ensure that certain methods are called under some specific conditions. Jest was used to create those tests. Test folders are found next to the files that are being tested.
 
-Writing unit tests in TypeScript can sometimes be troublesome and confusing. Especially when mocking dependencies and using spies.
+## Courier model
+Courier is comprised of three different fields, which are stored in MongoDB
+- ID - which is a unique identifier of the courier.
+- maxCapacity - which stores how many litres maximum the courier can actually take.
+- currentCapacity - which stores how many litres the courier can take right now.
 
-This is **optional**, but if you want to learn how to write JavaScript tests for TypeScript modules, read the [corresponding wiki page][wiki-js-tests].
+## API calls
+API currently has five different endpoints to call:
+```sh
+curl http://localhost:3000/api/courier/
+```
+Returns all couriers in the collection. No filtering is done in this API.
 
-## Backers & Sponsors
+```sh
+curl --header "Content-Type: application/json"   --request POST   --data '{"max_capacity":45}'   http://localhost:3000/api/courier
+```
+This endpoint is for inserting variables. It only contains max_capacity as a variable and currentCapacity is stored to the same value.
 
-Support this project by becoming a sponsor.
+```sh
+curl --header "Content-Type: application/json"   --request GET   --data '{"capacity_required":16}'   http://localhost:3000/api/courier/lookup
+```
+This endpoint is for finding couriers with current available capacity, which must be equal or greater than the value user puts into capacity_required field.
 
-## License
-Licensed under the APLv2. See the [LICENSE](https://github.com/jsynowiec/node-typescript-boilerplate/blob/master/LICENSE) file for details.
+```sh
+curl --header "Content-Type: application/json"   --request PUT   --data '{"current_capacity":20, "max_capacity":45}'   http://localhost:3000/api/courier/5ec75f118d5e350e44cd67d1
+```
+This endpoint is for updating couriers values. Both current_capacity and max_capacity has to be passed in order for this to work.
 
-[ts-badge]: https://img.shields.io/badge/TypeScript-3.8-blue.svg
-[nodejs-badge]: https://img.shields.io/badge/Node.js->=%2012.13-blue.svg
-[nodejs]: https://nodejs.org/dist/latest-v12.x/docs/api/
-[travis-badge]: https://travis-ci.org/jsynowiec/node-typescript-boilerplate.svg?branch=master
-[travis-ci]: https://travis-ci.org/jsynowiec/node-typescript-boilerplate
-[gha-badge]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fjsynowiec%2Fnode-typescript-boilerplate%2Fbadge&style=flat
-[gha-ci]: https://github.com/jsynowiec/node-typescript-boilerplate/actions
-[typescript]: https://www.typescriptlang.org/
-[typescript-38]: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-8.html
-[license-badge]: https://img.shields.io/badge/license-APLv2-blue.svg
-[license]: https://github.com/jsynowiec/node-typescript-boilerplate/blob/master/LICENSE
+```sh
+curl --header "Content-Type: application/json"   --request DELETE   http://localhost:3000/api/courier/5ec75f118d5e350e44cd67d1
+```
 
-[sponsor-badge]: https://img.shields.io/badge/♥-Sponsor-fc0fb5.svg
-[sponsor]: https://github.com/sponsors/jsynowiec
-
-[jest]: https://facebook.github.io/jest/
-[eslint]: https://github.com/eslint/eslint
-[wiki-js-tests]: https://github.com/jsynowiec/node-typescript-boilerplate/wiki/Unit-tests-in-plain-JavaScript
-[prettier]: https://prettier.io
-[gh-actions]: https://github.com/features/actions
-[travis]: https://travis-ci.org
-
-[repo-template-action]: https://github.com/jsynowiec/node-typescript-boilerplate/generate
+This endpoint is for deleting the courier. The id of the courier has to be passed for this operation.
