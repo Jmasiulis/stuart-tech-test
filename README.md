@@ -88,6 +88,7 @@ This task is far from finished or perfect under the certain timebox, here are th
 - Integration testing. Specifically testing data inserts into DB, testing if data is fetched correctly from there under given rules.
 - Race condition. This could be solved by using locks, for instance. If we would lock some specific part of data as it is being updated, we could make sure that it's not confusing users who are trying to read it. Good example for that would be [Async-lock](https://www.npmjs.com/package/async-lock)
 - Better naming on some functions.
+- For AWS deployment, we can easily use Serverless, as this would save resources when the service is not used as often (let's say night time). Of course, it depends on the overall usage of the API.
 
 ## Author
 Justinas Masiulis, masiulisjustinas@gmail.com
